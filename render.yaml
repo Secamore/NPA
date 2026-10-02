@@ -1,0 +1,17 @@
+# Render.com blueprint (starting template — check field names against Render's current docs).
+# A persistent disk requires a paid instance type; without it, user accounts are lost on restart.
+services:
+  - type: web
+    name: npa-material-balance
+    runtime: docker
+    plan: starter
+    healthCheckPath: /_stcore/health
+    disk:
+      name: npa-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: NPA_MANAGER_PASSWORD     # set this in the Render dashboard (not stored in git)
+        sync: false
+      - key: NPA_MANAGER_INVITE       # code needed to self-register a manager account
+        generateValue: true

@@ -1,0 +1,9 @@
+streamlit>=1.52,<2
+pandas>=2.2
+numpy>=1.26
+plotly>=5.20
+openpyxl>=3.1
+xlrd>=2.0.1
+fpdf2>=2.8
+matplotlib>=3.8
+pillow>=10.0
