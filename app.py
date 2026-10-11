@@ -3584,6 +3584,19 @@ def render_app(user: dict) -> None:
                 st.error(f"⚠️ {f.name}: {exc}")
         if frames:
             raw = pd.concat(frames, ignore_index=True, sort=False)
+            upload_hash = hashlib.sha256()
+            for file in uploaded:
+                upload_hash.update(file.name.encode("utf-8"))
+                upload_hash.update(file.getvalue())
+            editor_key = f"source_data_{user['id']}_{upload_hash.hexdigest()[:16]}"
+            with st.expander("📋 Review and edit uploaded data", expanded=False):
+                st.caption("All uploaded rows are shown. Edit cells directly, delete unwanted rows in the table, "
+                           "or remove a whole file with the × in the uploader. Changes apply to this analysis.")
+                locked_cols = [c for c in raw.columns
+                               if c.startswith("__") or c == "Source File"]
+                raw = st.data_editor(raw, key=editor_key, num_rows="dynamic",
+                                     width="stretch", height=500, hide_index=True,
+                                     disabled=locked_cols)
 
     NO_DATA_PAGES = {"User Management", "Company Management", "Audit Log", "My Staff",
                      "Submissions Log", "My Profile", "Help & Template"}
@@ -5078,8 +5091,8 @@ def render_data_audit(raw, mapping, issues, unit, clean_log=None, balance=None):
     st.markdown("---")
     st.markdown('<div class="section-title">Source Data Preview</div>', unsafe_allow_html=True)
     st.caption(f"{len(raw):,} raw rows · volumes analysed in **{unit}**")
-    st.dataframe(raw.drop(columns=[c for c in ("__row",) if c in raw.columns]).head(500),
-                 width="stretch", height=380)
+    st.dataframe(raw.drop(columns=[c for c in ("__row",) if c in raw.columns]),
+                 width="stretch", height=500)
     st.markdown("---")
     st.markdown('<div class="section-title">Column Mapping</div>', unsafe_allow_html=True)
     st.dataframe(pd.DataFrame([{
