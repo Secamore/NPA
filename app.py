@@ -5385,6 +5385,18 @@ or iOS. Internet is not needed after Python and the app dependencies are install
 The host runs the app and holds the shared SQLite database. This is not a separate
 installation on each device; separate offline copies do not sync accounts or data.
 
+## Install this app locally
+
+Use the browser's built-in install flow to turn the app into a desktop or home-screen app:
+
+- Chrome or Edge on Windows/macOS/Android: Menu ▸ Install app / Add to desktop
+- Safari on iPhone/iPad: Share ▸ Add to Home Screen
+- Chrome on Linux: Menu ▸ Install app
+
+After installation, open the app from its own shortcut. The app can continue to work on the
+local network even when public internet access is unavailable, as long as the host machine
+remains running.
+
 ## One-time setup on the host
 
 Install Python 3.12, open a terminal in the app folder, and create the environment:
@@ -5481,8 +5493,15 @@ A row is *within tolerance* when |Variance %| is at or below its department tole
         template_download_button("help_tpl")
         st.caption("Any layout is accepted. Units L, KL, M3, GAL, BBL are auto-converted to litres.")
 
-    with st.expander("Offline LAN setup"):
+    with st.expander("Install locally & offline setup"):
         st.markdown(OFFLINE_LAN_GUIDE)
+        st.markdown("""
+### Quick offline checklist
+- Keep the host computer on the same private LAN.
+- Start the app with `NPA_OFFLINE=1` to stop remote-only branding and optional online lookups.
+- Store data in a fixed local path such as `~/NPAData` or `C:/NPAData`.
+- Use the browser install option to make the app available on each device without internet access.
+""")
 
     st.markdown('<div class="section-title">Departments & Tolerances</div>', unsafe_allow_html=True)
     st.dataframe(pd.DataFrame([{
